@@ -1,11 +1,17 @@
 package com.lyshopping.common;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
+import org.codehaus.jackson.map.annotate.JsonSerialize;
+
 import java.io.Serializable;
 
 /**
  * @author liuying
  * 通用的数据响应对象
+ * @JsonIgnore让改方法的返回值在序列化后不显示在json里面（使之不在json序列化结果当中）
+ * @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)意思是值为null的结果不返回（保证序列化的时候，如果是null的对象，key也会消失）
  **/
+@JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 public class ServerResponse<T> implements Serializable {
 
     private int status;
@@ -32,6 +38,7 @@ public class ServerResponse<T> implements Serializable {
         this.msg = msg;
     }
 
+    @JsonIgnore
     public boolean isSuccess(){
         return this.status == ResponseCode.SUCCESS.getCode();
     }
@@ -51,15 +58,30 @@ public class ServerResponse<T> implements Serializable {
     public static <T>  ServerResponse<T> createBySuccess(){
         return new ServerResponse<T>(ResponseCode.SUCCESS.getCode());
     }
-
-    public static <T> ServerResponse<T> createBySuccess(String msg){
-        return new ServerResponse<T>(ResponseCode.SUCCESS.getCode());
+    public static <T> ServerResponse<T> createBySuccessMessage(String msg){
+        return new ServerResponse<T>(ResponseCode.SUCCESS.getCode(),msg);
+    }
+    public static <T> ServerResponse<T> createBySuccess(T data){
+        return new ServerResponse<T>(ResponseCode.SUCCESS.getCode(),data);
     }
 
-    public static <T> ServerResponse<T> createBySuccess(String msg, T Data){
-        return new ServerResponse<T>(ResponseCode.SUCCESS.getCode());
+    public static <T> ServerResponse<T> createBySuccess(String msg, T data){
+        return new ServerResponse<T>(ResponseCode.SUCCESS.getCode(),msg,data);
     }
 
-    public
 
+
+
+
+    public static <T> ServerResponse<T> createByError(){
+        return new ServerResponse<T>(ResponseCode.ERROR.getCode());
+    }
+
+    public static <T> ServerResponse<T> createByErrorMessage(String errorMessage){
+        return new ServerResponse<T>(ResponseCode.ERROR.getCode(),errorMessage);
+    }
+
+    public static <T> ServerResponse<T> createByErrorCodeMessage(int errorCode,String errorMessage){
+        return new ServerResponse<T>(errorCode,errorMessage);
+    }
 }
