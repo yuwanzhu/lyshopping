@@ -37,7 +37,7 @@ public interface UserMapper {
     int checkEmail(String email);
 
     /**
-     *
+     *通过用户名称查询用户设置的问题
      * **/
      String selectQuestionByUsername(String username);
 

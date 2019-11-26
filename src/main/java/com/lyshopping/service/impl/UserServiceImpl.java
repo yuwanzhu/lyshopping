@@ -105,7 +105,9 @@ public class UserServiceImpl implements IUserService {
         }
         return ServerResponse.createBySuccessMessage("校验成功");
     }
-
+    /**
+     * 查询注册时用户设置问题
+     * **/
     @Override
     public ServerResponse selectQuestion(String username) {
         ServerResponse vaildResponse = this.checkValid(username,Const.USERNAME);
@@ -119,6 +121,9 @@ public class UserServiceImpl implements IUserService {
         return ServerResponse.createByErrorMessage("找回密码的问题是空的");
     }
 
+    /**
+     * 校验问题的答案
+     * **/
     @Override
     public ServerResponse<String> checkAnswer(String username, String question, String answer) {
         int resultCount = userMapper.checkAnswer(username,question,answer);
