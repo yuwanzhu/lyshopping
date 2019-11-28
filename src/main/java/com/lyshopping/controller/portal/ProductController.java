@@ -22,13 +22,26 @@ public class ProductController {
     @Autowired
     private IProductService iProductService;
 
-
+    /**
+     * 用户端的商品查询
+     * @param productId
+     * @return
+     */
     @RequestMapping("detail.do")
     @ResponseBody
     public ServerResponse<ProductDetailVo> detail(Integer productId) {
         return iProductService.getProductDetail(productId);
     }
 
+    /**
+     * 用户端产品搜索（分页）
+     * @param keyword
+     * @param categoryId
+     * @param pageNum
+     * @param pageSize
+     * @param orderBy
+     * @return
+     */
     @RequestMapping("list.do")
     @ResponseBody
     public ServerResponse<PageInfo> list(@RequestParam(value = "keyword", required = false) String keyword,

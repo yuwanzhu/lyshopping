@@ -19,6 +19,7 @@ import java.util.UUID;
  * @author liuying
  * 文件上传
  **/
+@Service("iFileService")
 public class FileServiceImpl implements IFileService {
     private Logger logger = LoggerFactory.getLogger(FileServiceImpl.class);
 

@@ -13,6 +13,7 @@ public class ProductListVo {
     private String name;
     private String subtitle;
     private String mainImage;
+
     private BigDecimal price;
 
     private Integer status;

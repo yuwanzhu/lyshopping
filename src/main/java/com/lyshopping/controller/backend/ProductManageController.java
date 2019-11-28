@@ -99,6 +99,12 @@ public class ProductManageController {
         }
     }
 
+    /**
+     *商品列表
+     * @param session
+     * @param pageNum 第几页，默认为1
+     * @param pageSize 每一页默认十条数据
+     * **/
     @RequestMapping("list.do")
     @ResponseBody
     public ServerResponse getList(HttpSession session, @RequestParam(value = "pageNum",defaultValue = "1") int pageNum,@RequestParam(value = "pageSize",defaultValue = "10") int pageSize){
@@ -115,6 +121,15 @@ public class ProductManageController {
         }
     }
 
+    /***
+     * 查询功能
+     * @param session
+     * @param productName
+     * @param productId
+     * @param pageNum
+     * @param pageSize
+     * @return
+     */
     @RequestMapping("search.do")
     @ResponseBody
     public ServerResponse productSearch(HttpSession session,String productName,Integer productId, @RequestParam(value = "pageNum",defaultValue = "1") int pageNum,@RequestParam(value = "pageSize",defaultValue = "10") int pageSize){
@@ -131,6 +146,13 @@ public class ProductManageController {
         }
     }
 
+    /**
+     * 文件上传
+     * @param session
+     * @param file
+     * @param request
+     * @return
+     */
     @RequestMapping("upload.do")
     @ResponseBody
     public ServerResponse upload(HttpSession session,@RequestParam(value = "upload_file",required = false) MultipartFile file,HttpServletRequest request){
@@ -152,7 +174,14 @@ public class ProductManageController {
         }
     }
 
-
+    /**
+     * 富文本图片上传
+     * @param session
+     * @param file
+     * @param request
+     * @param response
+     * @return
+     */
     @RequestMapping("richtext_img_upload.do")
     @ResponseBody
     public Map richtextImgUpload(HttpSession session, @RequestParam(value = "upload_file",required = false) MultipartFile file, HttpServletRequest request, HttpServletResponse response){
@@ -166,7 +195,7 @@ public class ProductManageController {
         //富文本中对于返回值有自己的要求,我们使用是simditor所以按照simditor的要求进行返回
 //        {
 //            "success": true/false,
-//                "msg": "error message", # optional
+//            "msg": "error message", # optional
 //            "file_path": "[real file path]"
 //        }
         if(iUserService.checkAdminRole(user).isSuccess()){
