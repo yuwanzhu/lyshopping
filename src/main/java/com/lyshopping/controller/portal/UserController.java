@@ -5,7 +5,6 @@ import com.lyshopping.common.ResponseCode;
 import com.lyshopping.common.ServerResponse;
 import com.lyshopping.pojo.User;
 import com.lyshopping.service.IUserService;
-import com.sun.corba.se.spi.activation.Server;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,7 +14,7 @@ import javax.servlet.http.HttpSession;
 
 /**
  * @author liuying
- * 前端用户功能模块
+ * 门户（用户）功能模块
  **/
 @Controller
 @RequestMapping("/user/")
@@ -26,9 +25,10 @@ public class UserController {
 
     /***
      * 用户登录
-     * @param password
      * @param session
-     * @param username
+     * @param password 密码
+     * @param username 用户名
+     * @return status(1:密码错误; 0:成功)
      * */
     @RequestMapping(value = "login.do", method = RequestMethod.GET)
     @ResponseBody
@@ -41,7 +41,7 @@ public class UserController {
     }
 
     /***
-     * 退出
+     * 退出登录
      * **/
     @RequestMapping(value = "logout.do", method = RequestMethod.GET )
     @ResponseBody
@@ -52,7 +52,9 @@ public class UserController {
 
     /**
      * 注册
-     * **/
+     * @param user user对应属性
+     * @return status(1：用户已存在; 0:注册成功)
+     */
     @RequestMapping(value = "register.do",method = RequestMethod.GET)
     @ResponseBody
     public ServerResponse<String> register(User user){
@@ -60,8 +62,11 @@ public class UserController {
     }
 
     /**
-     * 校验用户名和邮箱是否存在
-     * **/
+     * 校验用户名或者邮箱是否有效
+     * @param str  可以是用户名，也可以是邮箱
+     * @param type 对应username和email
+     * @return
+     */
     @RequestMapping(value = "check_valid.do",method = RequestMethod.GET)
     @ResponseBody
     public ServerResponse<String>  checkvalid(String str,String type){
@@ -69,8 +74,10 @@ public class UserController {
     }
 
     /**
-     *获取用户信息
-     * ***/
+     * 获取用户信息
+     * @param session
+     * @return
+     */
     @RequestMapping(value = "get_User_Info.do",method = RequestMethod.GET)
     @ResponseBody
     public ServerResponse<User> getUserInfo(HttpSession session){
@@ -82,20 +89,49 @@ public class UserController {
     }
 
     /**
-     *忘记密码
-     **/
+     * 忘记密码
+     * @param username 用户名
+     * @return status( 0:成功； 1:失败)
+     */
     @RequestMapping(value = "forget_get_question.do",method = RequestMethod.GET)
     @ResponseBody
     public ServerResponse<String> forgetGetQuestion(String username){
         return iUserService.selectQuestion(username);
     }
 
-    @RequestMapping(value = "forget_reset_password.do",method = RequestMethod.GET)
+    /**
+     *提交问题答案
+     * @param username 用户名
+     * @param question 问题
+     * @param answer 答案
+     * @return token（具有有效期）
+     */
+    @RequestMapping(value = "forget_check_answer.do",method = RequestMethod.GET)
     @ResponseBody
     public ServerResponse<String> forgetCheckAnswer(String username,String question, String answer){
         return iUserService.checkAnswer(username, question, answer);
     }
 
+    /**
+     *忘记密码的重新设置密码
+     * @param username 用户名
+     * @param passwordNew 新密码
+     * @param forgetToken
+     * @return
+     */
+    @RequestMapping(value = "forget_reset_password.do",method = RequestMethod.POST)
+    @ResponseBody
+    public ServerResponse<String> forgetRestPassword(String username,String passwordNew,String forgetToken){
+        return iUserService.forgetResetPassword(username,passwordNew,forgetToken);
+    }
+
+    /**
+     * 登录转态的重置密码
+     * @param session
+     * @param passwordOld 旧密码
+     * @param passwordNew 新密码
+     * @return
+     */
     @RequestMapping(value = "reset_password.do",method = RequestMethod.GET)
     @ResponseBody
     public ServerResponse<String> resetPassword(HttpSession session,String passwordOld, String passwordNew){
@@ -106,6 +142,12 @@ public class UserController {
         return iUserService.resetPassword(passwordOld,passwordNew,user);
     }
 
+    /**
+     *登录状态更新个人信息
+     * @param session
+     * @param user 用户信息
+     * @return
+     */
     @RequestMapping(value = "update_information.do",method = RequestMethod.GET)
     @ResponseBody
     public ServerResponse<User> update_information(HttpSession session,User user){
@@ -123,6 +165,13 @@ public class UserController {
        return response;
     }
 
+    /**
+     * 获取用户的详细信息，并强制登录
+     * @param session
+     * @return
+     */
+    @RequestMapping(value = "get_information.do",method = RequestMethod.GET)
+    @ResponseBody
     public ServerResponse<User> get_information(HttpSession session){
         User currentUser = (User)session.getAttribute(Const.CURRENT_USER);
         if(currentUser == null){

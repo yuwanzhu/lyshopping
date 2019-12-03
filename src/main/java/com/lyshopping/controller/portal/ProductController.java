@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 /**
  * @author liuying
- * 用户端分类管理功能
+ * （门户）用户端分类管理功能
  **/
 @Controller
 @RequestMapping("/product/")
@@ -23,7 +23,7 @@ public class ProductController {
     private IProductService iProductService;
 
     /**
-     * 用户端的商品查询
+     * 产品的detail（详情）
      * @param productId
      * @return
      */
@@ -34,12 +34,12 @@ public class ProductController {
     }
 
     /**
-     * 用户端产品搜索（分页）
+     * 用户端产品搜索，以及动态排序List
      * @param keyword
-     * @param categoryId
-     * @param pageNum
-     * @param pageSize
-     * @param orderBy
+     * @param categoryId 分类id
+     * @param pageNum 页数
+     * @param pageSize 页中的条数
+     * @param orderBy(default="")排序的参数,例如price_desc,price_asc
      * @return
      */
     @RequestMapping("list.do")

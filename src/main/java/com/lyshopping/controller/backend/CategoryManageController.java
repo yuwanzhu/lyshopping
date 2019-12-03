@@ -1,8 +1,4 @@
 package com.lyshopping.controller.backend;
-
-
-
-
 import com.lyshopping.common.Const;
 import com.lyshopping.common.ResponseCode;
 import com.lyshopping.common.ServerResponse;
@@ -18,7 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpSession;
 /**
  * @author liuying
- * 分类管理模块
+ * 后台分类管理模块
  **/
 @Controller
 @RequestMapping("/manage/category")
@@ -31,6 +27,13 @@ public class CategoryManageController {
     @Autowired
     private ICategoryService iCategoryService;
 
+    /**
+     * 增加节点
+     * @param session
+     * @param categoryName 新节点的名称
+     * @param parentId
+     * @return
+     */
     @RequestMapping("add_category.do")
     @ResponseBody
     public ServerResponse addCategory(HttpSession session, String categoryName, @RequestParam(value = "parentId",defaultValue = "0") int parentId){
@@ -49,6 +52,13 @@ public class CategoryManageController {
         }
     }
 
+    /**
+     * 修改品类的名字
+     * @param session
+     * @param categoryId 节点id
+     * @param categoryName 品类的名称
+     * @return
+     */
     @RequestMapping("set_category_name.do")
     @ResponseBody
     public ServerResponse setCategoryName(HttpSession session,Integer categoryId,String categoryName){
@@ -64,6 +74,12 @@ public class CategoryManageController {
         }
     }
 
+    /**
+     * 获取平级的品类子节点
+     * @param session
+     * @param categoryId（default=0） 节点id
+     * @return
+     */
     @RequestMapping("get_category.do")
     @ResponseBody
     public ServerResponse getChildrenParallelCategory(HttpSession session,@RequestParam(value = "categoryId" ,defaultValue = "0") Integer categoryId){
@@ -79,6 +95,12 @@ public class CategoryManageController {
         }
     }
 
+    /**
+     * 获取当前分类的id及递归子节点cateGoryId
+     * @param session
+     * @param categoryId 节点id
+     * @return
+     */
     @RequestMapping("get_deep_category.do")
     @ResponseBody
     public ServerResponse getCategoryAndDeepChildrenCategory(HttpSession session,@RequestParam(value = "categoryId" ,defaultValue = "0") Integer categoryId){

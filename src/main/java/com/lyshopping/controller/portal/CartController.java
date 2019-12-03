@@ -15,7 +15,7 @@ import javax.servlet.http.HttpSession;
 
 /**
  * @author liuying
- * 购物车
+ * 门户购物车
  **/
 @Controller
 @RequestMapping("/cart/")
@@ -26,7 +26,7 @@ public class CartController {
     private ICartService iCartService;
 
     /**
-     *
+     *购物车list列表
      * @param session
      * @return
      */
@@ -58,7 +58,13 @@ public class CartController {
     }
 
 
-
+    /**
+     * 更新购物车某个产品数量
+     * @param session
+     * @param count 数量
+     * @param productId 商品id
+     * @return
+     */
         @RequestMapping("update.do")
         @ResponseBody
         public ServerResponse<CartVo> update(HttpSession session, Integer count, Integer productId){
@@ -69,6 +75,12 @@ public class CartController {
             return iCartService.update(user.getId(),productId,count);
         }
 
+    /**
+     * 移除购物车中某个商品
+     * @param session
+     * @param productIds 产品的id（可以带多个参数，用","(逗号分隔)）
+     * @return
+     */
         @RequestMapping("delete_product.do")
         @ResponseBody
         public ServerResponse<CartVo> deleteProduct(HttpSession session,String productIds){
@@ -79,8 +91,12 @@ public class CartController {
             return iCartService.deleteProduct(user.getId(),productIds);
         }
 
-
-        @RequestMapping("select_all.do")
+    /**
+     * 购物车全选（影响总价和是否全选对应字段的值）
+     * @param session
+     * @return
+     */
+    @RequestMapping("select_all.do")
         @ResponseBody
         public ServerResponse<CartVo> selectAll(HttpSession session){
             User user = (User)session.getAttribute(Const.CURRENT_USER);
@@ -90,7 +106,12 @@ public class CartController {
             return iCartService.selectOrUnSelect(user.getId(),null,Const.Cart.CHECKED);
         }
 
-        @RequestMapping("un_select_all.do")
+    /**
+     * 取消购物车全选
+     * @param session
+     * @return
+     */
+    @RequestMapping("un_select_all.do")
         @ResponseBody
         public ServerResponse<CartVo> unSelectAll(HttpSession session){
             User user = (User)session.getAttribute(Const.CURRENT_USER);
@@ -101,7 +122,12 @@ public class CartController {
         }
 
 
-
+    /**
+     * 购物车选中某个产品（总价格进行相应的计算）
+     * @param session
+     * @param productId 产品id
+     * @return
+     */
         @RequestMapping("select.do")
         @ResponseBody
         public ServerResponse<CartVo> select(HttpSession session,Integer productId){
@@ -112,6 +138,12 @@ public class CartController {
             return iCartService.selectOrUnSelect(user.getId(),productId,Const.Cart.CHECKED);
         }
 
+    /**
+     * 取消选中某个产品
+     * @param session
+     * @param productId 商品id
+     * @return
+     */
         @RequestMapping("un_select.do")
         @ResponseBody
         public ServerResponse<CartVo> unSelect(HttpSession session,Integer productId){
@@ -123,8 +155,12 @@ public class CartController {
         }
 
 
-
-        @RequestMapping("get_cart_product_count.do")
+    /**
+     * 查询购物车中产品的数量
+     * @param session
+     * @return
+     */
+    @RequestMapping("get_cart_product_count.do")
         @ResponseBody
         public ServerResponse<Integer> getCartProductCount(HttpSession session){
             User user = (User)session.getAttribute(Const.CURRENT_USER);
@@ -133,17 +169,4 @@ public class CartController {
             }
             return iCartService.getCartProductCount(user.getId());
         }
-
-
-
-
-        //全选
-        //全反选
-
-        //单独选
-        //单独反选
-
-        //查询当前用户的购物车里面的产品数量,如果一个产品有10个,那么数量就是10.
-
-
     }

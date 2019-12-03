@@ -2,6 +2,9 @@ package com.lyshopping.pojo;
 
 import java.util.Date;
 
+/**
+ * 收货地址相关参数(对象)类
+ * */
 public class Shipping {
     private Integer id;
 

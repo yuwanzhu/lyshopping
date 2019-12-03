@@ -24,7 +24,7 @@ import javax.servlet.http.HttpSession;
 import java.util.Map;
 /**
  * @author liuying
- * 商品模块
+ * 后台商品模块
  **/
 @Controller
 @RequestMapping("/manage/product")
@@ -38,8 +38,8 @@ public class ProductManageController {
 
 
     /**
-     *保存商品
-     * @param session 用户获取用户权限
+     *新增或者跟新商品
+     * @param session User
      * @param product 商品的属性
      * **/
     @RequestMapping("save.do")
@@ -79,9 +79,14 @@ public class ProductManageController {
             return ServerResponse.createByErrorMessage("无权限操作");
         }
     }
+
     /**
      * 获取产品详情
-     * **/
+     * @param session
+     * @param productId 产品id
+     * @return
+     */
+
     @RequestMapping("detail.do")
     @ResponseBody
     public ServerResponse getDetail(HttpSession session, Integer productId){
@@ -122,12 +127,12 @@ public class ProductManageController {
     }
 
     /***
-     * 查询功能
+     * 产品搜索
      * @param session
-     * @param productName
-     * @param productId
-     * @param pageNum
-     * @param pageSize
+     * @param productName 产品名称
+     * @param productId 产品id
+     * @param pageNum 页数
+     * @param pageSize 条数
      * @return
      */
     @RequestMapping("search.do")
@@ -147,7 +152,7 @@ public class ProductManageController {
     }
 
     /**
-     * 文件上传
+     * springMvc图片上传
      * @param session
      * @param file
      * @param request
@@ -177,7 +182,7 @@ public class ProductManageController {
     /**
      * 富文本图片上传
      * @param session
-     * @param file
+     * @param file 图片的地址
      * @param request
      * @param response
      * @return
