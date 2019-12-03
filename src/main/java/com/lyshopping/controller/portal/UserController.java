@@ -30,7 +30,7 @@ public class UserController {
      * @param username 用户名
      * @return status(1:密码错误; 0:成功)
      * */
-    @RequestMapping(value = "login.do", method = RequestMethod.GET)
+    @RequestMapping(value = "login.do", method = RequestMethod.POST)
     @ResponseBody
     public ServerResponse<User> login(String username, String password, HttpSession session){
         ServerResponse<User> response = iUserService.login(username, password);
@@ -43,7 +43,7 @@ public class UserController {
     /***
      * 退出登录
      * **/
-    @RequestMapping(value = "logout.do", method = RequestMethod.GET )
+    @RequestMapping(value = "logout.do", method = RequestMethod.POST)
     @ResponseBody
     public ServerResponse<String> logout(HttpSession session){
         session.removeAttribute(Const.CURRENT_USER);
@@ -55,7 +55,7 @@ public class UserController {
      * @param user user对应属性
      * @return status(1：用户已存在; 0:注册成功)
      */
-    @RequestMapping(value = "register.do",method = RequestMethod.GET)
+    @RequestMapping(value = "register.do",method = RequestMethod.POST)
     @ResponseBody
     public ServerResponse<String> register(User user){
         return iUserService.register(user);
@@ -67,7 +67,7 @@ public class UserController {
      * @param type 对应username和email
      * @return
      */
-    @RequestMapping(value = "check_valid.do",method = RequestMethod.GET)
+    @RequestMapping(value = "check_valid.do",method = RequestMethod.POST)
     @ResponseBody
     public ServerResponse<String>  checkvalid(String str,String type){
         return iUserService.checkValid(str,type);
@@ -78,7 +78,7 @@ public class UserController {
      * @param session
      * @return
      */
-    @RequestMapping(value = "get_User_Info.do",method = RequestMethod.GET)
+    @RequestMapping(value = "get_User_Info.do",method = RequestMethod.POST)
     @ResponseBody
     public ServerResponse<User> getUserInfo(HttpSession session){
         User user = (User) session.getAttribute(Const.CURRENT_USER);
@@ -93,7 +93,7 @@ public class UserController {
      * @param username 用户名
      * @return status( 0:成功； 1:失败)
      */
-    @RequestMapping(value = "forget_get_question.do",method = RequestMethod.GET)
+    @RequestMapping(value = "forget_get_question.do",method = RequestMethod.POST)
     @ResponseBody
     public ServerResponse<String> forgetGetQuestion(String username){
         return iUserService.selectQuestion(username);
@@ -106,7 +106,7 @@ public class UserController {
      * @param answer 答案
      * @return token（具有有效期）
      */
-    @RequestMapping(value = "forget_check_answer.do",method = RequestMethod.GET)
+    @RequestMapping(value = "forget_check_answer.do",method = RequestMethod.POST)
     @ResponseBody
     public ServerResponse<String> forgetCheckAnswer(String username,String question, String answer){
         return iUserService.checkAnswer(username, question, answer);
@@ -132,7 +132,7 @@ public class UserController {
      * @param passwordNew 新密码
      * @return
      */
-    @RequestMapping(value = "reset_password.do",method = RequestMethod.GET)
+    @RequestMapping(value = "reset_password.do",method = RequestMethod.POST)
     @ResponseBody
     public ServerResponse<String> resetPassword(HttpSession session,String passwordOld, String passwordNew){
         User user =(User) session.getAttribute(Const.CURRENT_USER);
@@ -148,7 +148,7 @@ public class UserController {
      * @param user 用户信息
      * @return
      */
-    @RequestMapping(value = "update_information.do",method = RequestMethod.GET)
+    @RequestMapping(value = "update_information.do",method = RequestMethod.POST)
     @ResponseBody
     public ServerResponse<User> update_information(HttpSession session,User user){
        User currentUser =(User)session.getAttribute(Const.CURRENT_USER);
@@ -170,7 +170,7 @@ public class UserController {
      * @param session
      * @return
      */
-    @RequestMapping(value = "get_information.do",method = RequestMethod.GET)
+    @RequestMapping(value = "get_information.do",method = RequestMethod.POST)
     @ResponseBody
     public ServerResponse<User> get_information(HttpSession session){
         User currentUser = (User)session.getAttribute(Const.CURRENT_USER);
