@@ -48,4 +48,9 @@ public interface UserMapper {
      int checkPassword(@Param(value = "password")String password,@Param("userId") Integer userId);
 
      int checkEmailByUserId(@Param("email") String email,@Param("userId") Integer userId);
+
+     /**
+      * 查询所有的会员的信息
+      * */
+     User selectAllUsers(User user);
 }

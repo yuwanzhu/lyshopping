@@ -21,15 +21,15 @@
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
     <include refid="Base_Column_List" />
-    from lyshopping_user
+    from liuying_user
     where id = #{id,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
-    delete from lyshopping_user
+    delete from liuying_user
     where id = #{id,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="com.lyshopping.pojo.User" >
-    insert into lyshopping_user (id, username, password, 
+    insert into liuying_user (id, username, password,
       email, phone, question, 
       answer, role, create_time, 
       update_time)
@@ -39,7 +39,7 @@
       now())
   </insert>
   <insert id="insertSelective" parameterType="com.lyshopping.pojo.User" >
-    insert into lyshopping_user
+    insert into liuying_user
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
         id,
@@ -106,7 +106,7 @@
     </trim>
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="com.lyshopping.pojo.User" >
-    update lyshopping_user
+    update liuying_user
     <set >
       <if test="username != null" >
         username = #{username,jdbcType=VARCHAR},
@@ -139,7 +139,7 @@
     where id = #{id,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.lyshopping.pojo.User" >
-    update lyshopping_user
+    update liuying_user
     set username = #{username,jdbcType=VARCHAR},
       password = #{password,jdbcType=VARCHAR},
       email = #{email,jdbcType=VARCHAR},
@@ -153,7 +153,7 @@
   </update>
 
   <select id="checkUsername" resultType="int" parameterType="String">
-    select count(1) from lyshopping_user
+    select count(1) from liuying_user
     where username = #{username}
   </select>
 
@@ -162,34 +162,34 @@
   <select id="selectLogin" resultMap="BaseResultMap" parameterType="map">
     select
     <include refid="Base_Column_List" />
-    from lyshopping_user
+    from liuying_user
     where username = #{username}
     and password = #{password}
   </select>
 
   <select id="checkEmail" resultType="int" parameterType="String">
-    select count(1) from lyshopping_user
+    select count(1) from liuying_user
     where email =  #{email}
   </select>
 
   <select id="selectQuestionByUsername" resultType="String" parameterType="string">
     select
     question
-    from lyshopping_user
+    from liuying_user
     where username = #{username}
   </select>
 
   <select id="checkAnswer" resultType="int" parameterType="map">
     select
     count(1)
-    from lyshopping_user
+    from liuying_user
     where username= #{username}
     and question = #{question}
     and answer = #{answer}
   </select>
 
   <update id="updatePasswordByUsername" parameterType="map">
-    update lyshopping_user
+    update liuying_user
     set password = #{passwordNew},update_time = now()
     where username = #{username}
 
@@ -198,14 +198,22 @@
   <select id="checkPassword" resultType="int" parameterType="map">
     SELECT
     count(1)
-    from lyshopping_user
+    from liuying_user
     where password = #{password}
     and id = #{userId}
   </select>
 
   <select id="checkEmailByUserId" resultType="int" parameterType="map">
-    select count(1) from lyshopping_user
+    select count(1) from liuying_user
     where email = #{email}
     and id != #{userId}
+  </select>
+
+
+  <select id="selectAllUsers" resultMap="BaseResultMap" >
+    select
+    <include refid="Base_Column_List" />
+    from liuying_user
+    where 1=1
   </select>
 </mapper>

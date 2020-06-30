@@ -2,11 +2,11 @@ package com.lyshopping.service.impl;
 
 import com.lyshopping.common.Const;
 import com.lyshopping.common.ServerResponse;
-import com.lyshopping.common.TokenCache;
 import com.lyshopping.dao.UserMapper;
 import com.lyshopping.pojo.User;
 import com.lyshopping.service.IUserService;
 import com.lyshopping.util.MD5Util;
+import com.lyshopping.util.RedisPoolUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,18 +22,21 @@ public class UserServiceImpl implements IUserService {
 
     @Autowired
     private UserMapper userMapper;
-
     /**
      * 登录功能
      * */
     @Override
     public ServerResponse<User> login(String username, String password) {
+        System.out.println("请求到了这里："+username);
         int resultCount = userMapper.checkUsername(username);
+        System.out.println("数据库中查到的数据为："+resultCount);
         if(resultCount == 0){
             return  ServerResponse.createByErrorMessage("用户名不存在");
         }
         String md5Password = MD5Util.MD5EncodeUtf8(password);
+        System.out.println("密码为："+password + " "+md5Password);
         User user = userMapper.selectLogin(username, md5Password);
+        System.out.println("+++++++"+user.toString());
         if(user == null){
             return ServerResponse.createByErrorMessage("密码错误");
         }
@@ -130,7 +133,9 @@ public class UserServiceImpl implements IUserService {
         if(resultCount > 0){
             //说明问题及问题答案是这个用户的，并且是正确的
             String forgetToken = UUID.randomUUID().toString();
-            TokenCache.setKey(TokenCache.TOKEN_PREFIX+username,forgetToken);
+            //一期代碼，將token放入guavaCache中
+            //TokenCache.setKey(TokenCache.TOKEN_PREFIX+username,forgetToken);
+            RedisPoolUtil.setEx(Const.TOKEN_PREFIX+username,forgetToken,60*60*12);
             return ServerResponse.createBySuccess(forgetToken);
         }
         return ServerResponse.createByErrorMessage("问题的答案错误");
@@ -146,8 +151,7 @@ public class UserServiceImpl implements IUserService {
             //用户不存在
             return ServerResponse.createByErrorMessage("用户不存在");
         }
-
-        String token = TokenCache.getKey(TokenCache.TOKEN_PREFIX+username);
+        String token  = RedisPoolUtil.get(Const.TOKEN_PREFIX+username);
         if(StringUtils.isBlank(token)){
             return ServerResponse.createByErrorMessage("token无效或者过期");
         }
@@ -223,6 +227,15 @@ public class UserServiceImpl implements IUserService {
             return ServerResponse.createBySuccess();
         }
         return ServerResponse.createByError();
+    }
+
+    /**
+     * 查询当前店铺的所有会员信息
+     * */
+    @Override
+    public ServerResponse selectAllUser(User user) {
+        user = userMapper.selectAllUsers(user);
+        return ServerResponse.createBySuccess();
     }
 
 

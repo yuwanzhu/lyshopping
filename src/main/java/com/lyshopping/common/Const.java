@@ -10,10 +10,15 @@ import java.util.Set;
  **/
 public class Const {
     public static final String CURRENT_USER = "currentUser";
-
     public static final String EMAIL = "email";
     public static final String USERNAME = "username";
 
+    public static final String TOKEN_PREFIX = "token_";
+
+    //登录的时候把放入redis的session的有限时间设置为30分钟
+    public interface  RedisCacheExtime{
+        int REDIS_SESSION_EXTIME = 60 * 30;//30分钟
+    }
     //角色
     public interface  Role{
         int ROLE_CURRENT = 0;//普通用户

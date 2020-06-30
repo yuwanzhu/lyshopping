@@ -16,7 +16,7 @@ public class PropertiesUtil {
         private static Properties props;
 
         static {
-            String fileName = "lyshopping.properties";
+            String fileName = "dev/lyshopping.properties";
             props = new Properties();
             try {
                 props.load(new InputStreamReader(PropertiesUtil.class.getClassLoader().getResourceAsStream(fileName),"UTF-8"));
@@ -33,6 +33,11 @@ public class PropertiesUtil {
             return value.trim();
         }
 
+        /**
+         * 获取配置文件中配置的值
+         * key表示配置文件中配置好的属性的名称
+         * defaultVa：表示给属性添加默认的值，防止报空指针
+         * */
         public static String getProperty(String key,String defaultValue){
 
             String value = props.getProperty(key.trim());
