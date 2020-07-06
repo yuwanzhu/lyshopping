@@ -84,14 +84,14 @@ public class RedisShardedPool {
     }
 
     //测试
-    public static void main(String[] args) {
-            ShardedJedis jedis = pool.getResource();
-            for(int i=0; i<10;i++){
-            jedis.set("key"+i, "value"+i);
-        }
-            returnResource(jedis);
-            //临时调用，销毁连接池中的所有连接
-            //pool.destroy();
-            System.out.println("progrm is end");
-    }
+//    public static void main(String[] args) {
+//            ShardedJedis jedis = pool.getResource();
+//            for(int i=0; i<10;i++){
+//            jedis.set("key"+i, "value"+i);
+//        }
+//            returnResource(jedis);
+//            //临时调用，销毁连接池中的所有连接
+//            //pool.destroy();
+//            System.out.println("progrm is end");
+//    }
 }

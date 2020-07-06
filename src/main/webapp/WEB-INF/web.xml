@@ -24,16 +24,25 @@
         <url-pattern>/*</url-pattern>
     </filter-mapping>
 
-    <!--重置session时间的filter-->
+    <!--二期重置session时间的filter，对业务有入侵-->
+<!--    <filter>-->
+<!--        <filter-name>sessionExpireFilter</filter-name>-->
+<!--        <filter-class>com.lyshopping.common.SessionExpireFilter</filter-class>-->
+<!--    </filter>-->
+<!--    <filter-mapping>-->
+<!--        <filter-name>sessionExpireFilter</filter-name>-->
+<!--        <url-pattern>*.do</url-pattern>-->
+<!--    </filter-mapping>-->
+
+    <!--使用SpringSession框架下的过滤器，业务没有入侵-->
     <filter>
-        <filter-name>sessionExpireFilter</filter-name>
-        <filter-class>com.lyshopping.common.SessionExpireFilter</filter-class>
+        <filter-name>springSessionRepositoryFilter</filter-name>
+        <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
     </filter>
     <filter-mapping>
-        <filter-name>sessionExpireFilter</filter-name>
+        <filter-name>springSessionRepositoryFilter</filter-name>
         <url-pattern>*.do</url-pattern>
     </filter-mapping>
-
 
     <!--监听web容器的启动和关闭-->
     <listener>
@@ -68,9 +77,15 @@
 
 
 
+<!--    <servlet-mapping>-->
+<!--        <servlet-name>dispatcher</servlet-name>-->
+<!--        <url-pattern>*.do</url-pattern>-->
+<!--    </servlet-mapping>-->
+
+    <!--接收"/"下所有的请求，目的使用springRESTful改造-->
     <servlet-mapping>
         <servlet-name>dispatcher</servlet-name>
-        <url-pattern>*.do</url-pattern>
+        <url-pattern>/</url-pattern>
     </servlet-mapping>
 
 </web-app>

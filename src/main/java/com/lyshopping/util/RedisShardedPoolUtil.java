@@ -100,6 +100,39 @@ public class RedisShardedPoolUtil {
             RedisShardedPool.returnResource(jedis);
             return result;
         }
+    //设置分布式锁
+    public static Long setnx(String key,String value){
+        ShardedJedis jedis = null;
+        Long result = null;
+
+        try {
+            jedis = RedisShardedPool.getJedis();
+            result = jedis.setnx(key,value);
+        } catch (Exception e) {
+            log.error("setnx key:{} value:{} error",key,value,e);
+            RedisShardedPool.returnBrokenResource(jedis);
+            return result;
+        }
+        RedisShardedPool.returnResource(jedis);
+        return result;
+    }
+
+    //分布式锁相关getset
+    public static String   getSet(String key,String value){
+        ShardedJedis jedis = null;
+        String result = null;
+        try {
+            jedis = RedisShardedPool.getJedis();
+            result = jedis.getSet(key,value);
+        } catch (Exception e) {
+            log.error("getset key:{} value:{} error",key,value,e);
+            RedisShardedPool.returnBrokenResource(jedis);
+            return result;
+        }
+        RedisShardedPool.returnResource(jedis);
+        return result;
+    }
+
 //测试
 //    public static void main(String[] args) {
 //            ShardedJedis jedis = RedisShardedPool.getJedis();

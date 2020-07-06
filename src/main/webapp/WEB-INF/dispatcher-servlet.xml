@@ -7,8 +7,11 @@
 	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
 	http://www.springframework.org/schema/mvc
 	http://www.springframework.org/schema/mvc/spring-mvc.xsd">
-    <!--springmvc配置-->
-    <context:component-scan base-package="com.lyshopping" annotation-config="true"/>
+    <!--springmvc配置文件-->
+    <!--将默认的扫描方式关闭，然后添加白名单，只扫描@Controller-->
+    <context:component-scan base-package="com.lyshopping.controller" annotation-config="true" use-default-filters="false">
+        <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+    </context:component-scan>
 
     <mvc:annotation-driven>
         <mvc:message-converters>
@@ -38,6 +41,23 @@
         <property name="maxInMemorySize" value="4096" />
         <property name="defaultEncoding" value="UTF-8"></property>
     </bean>
+
+    <!--拦截器-->
+    <mvc:interceptors>
+        <!--定义在这里的，所有的都会被拦截-->
+        <mvc:interceptor>
+            <!--manage/a.do   /manage/*-->
+            <!--manage/b.do   /manage/*-->
+            <!--manage/user/a.do   /manage/**-->
+            <!--manage/order/a.do   /manage/**-->
+            <!--拦截器的第一种简单实现-->
+            <mvc:mapping path="/manage/**"/>
+            <!--拦截器开放请求方法1-->
+            <!-- <mvc:exclude-mapping path="/manage/user/login.do"/>-->
+            <!--拦截器的第二种实现，开放请求方法在具体类中实现-->
+            <bean class="com.lyshopping.controller.interceptor.AuthorityInterceptor"/>
+        </mvc:interceptor>
+    </mvc:interceptors>
 
 
 </beans>
