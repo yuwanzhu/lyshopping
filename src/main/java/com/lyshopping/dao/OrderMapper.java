@@ -29,10 +29,15 @@ public interface OrderMapper {
 
     List<Order> selectAllOrder();
 
-    //定时关单
+    /**
+     * 定时关单
+     */
+
     List<Order> selectOrderStatusByCreateTime(@Param("status") Integer status,@Param("date") String date );
 
-    //关闭订单(通过订单号)
+    /**
+     * 关闭订单(通过订单号)
+     */
     int closeOrderByOrderId(Integer id);
 
 

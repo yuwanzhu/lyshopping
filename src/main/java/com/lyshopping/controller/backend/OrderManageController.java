@@ -9,7 +9,7 @@ import com.lyshopping.service.IOrderService;
 import com.lyshopping.service.IUserService;
 import com.lyshopping.util.CookieUtil;
 import com.lyshopping.util.JsonUtil;
-import com.lyshopping.util.RedisPoolUtil;
+//import com.lyshopping.util.RedisPoolUtil;
 import com.lyshopping.util.RedisShardedPoolUtil;
 import com.lyshopping.viewObject.OrderVo;
 import org.springframework.beans.factory.annotation.Autowired;

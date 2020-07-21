@@ -9,7 +9,7 @@ import com.lyshopping.pojo.User;
 import com.lyshopping.service.IShippingService;
 import com.lyshopping.util.CookieUtil;
 import com.lyshopping.util.JsonUtil;
-import com.lyshopping.util.RedisPoolUtil;
+//import com.lyshopping.util.RedisPoolUtil;
 import com.lyshopping.util.RedisShardedPoolUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

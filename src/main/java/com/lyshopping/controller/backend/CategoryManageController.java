@@ -7,7 +7,7 @@ import com.lyshopping.service.ICategoryService;
 import com.lyshopping.service.IUserService;
 import com.lyshopping.util.CookieUtil;
 import com.lyshopping.util.JsonUtil;
-import com.lyshopping.util.RedisPoolUtil;
+//import com.lyshopping.util.RedisPoolUtil;
 import com.lyshopping.util.RedisShardedPoolUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -43,7 +43,7 @@ public class CategoryManageController {
     @RequestMapping("add_category.do")
     @ResponseBody
     public ServerResponse addCategory(HttpServletRequest httpServletRequest, String categoryName, @RequestParam(value = "parentId",defaultValue = "0") int parentId){
-//   用户登录转态以及权限校验，先阶段全部迁移到过滤器里面
+//   用户登录状态以及权限校验，先阶段全部迁移到过滤器里面
 //        String loginToken = CookieUtil.readLoginToken(httpServletRequest);
 //        if(StringUtils.isEmpty(loginToken)){
 //            return ServerResponse.createByErrorMessage("用户未登录，无法获取用户信息");

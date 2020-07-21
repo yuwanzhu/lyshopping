@@ -6,7 +6,7 @@ import com.lyshopping.dao.UserMapper;
 import com.lyshopping.pojo.User;
 import com.lyshopping.service.IUserService;
 import com.lyshopping.util.MD5Util;
-import com.lyshopping.util.RedisPoolUtil;
+//import com.lyshopping.util.RedisPoolUtil;
 import com.lyshopping.util.RedisShardedPoolUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +38,7 @@ public class UserServiceImpl implements IUserService {
             return ServerResponse.createByErrorMessage("密码错误");
         }
 
-        //处理返回值的密码，将他设置为空
+        //登录成功后，把返回给页面展示的密码设置为空
         user.setPassword(StringUtils.EMPTY);
         return ServerResponse.createBySuccess("登录成功",user);
     }

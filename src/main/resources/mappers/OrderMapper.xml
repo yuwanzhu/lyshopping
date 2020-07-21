@@ -246,10 +246,7 @@
   </select>
   <update id="closeOrderByOrderId" parameterType="int">
     update  lyshopping_product
-    set status = 0
+    SET status = 0
     where  id = #{id}
   </update>
-  
-
-
 </mapper>

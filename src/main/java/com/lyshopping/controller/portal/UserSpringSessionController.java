@@ -21,7 +21,7 @@ import javax.servlet.http.HttpSession;
 
 /**
  * @author liuying
- * springSession演示单点登录（缺点就是支持redis的分布式）
+ * springSession演示单点登录（缺点就是不支持redis的分布式）
  **/
 @Controller
 @RequestMapping("/user/springsession")

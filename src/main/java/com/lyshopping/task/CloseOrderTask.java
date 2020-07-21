@@ -1,7 +1,7 @@
 package com.lyshopping.task;
 
 import com.lyshopping.common.Const;
-import com.lyshopping.common.RedissonManage;
+//import com.lyshopping.common.RedissonManage;
 import com.lyshopping.service.IOrderService;
 import com.lyshopping.util.PropertiesUtil;
 import com.lyshopping.util.RedisShardedPoolUtil;
@@ -27,8 +27,8 @@ public class CloseOrderTask {
     @Autowired
     private IOrderService iOrderService;
 
-    @Autowired
-    private RedissonManage redissonManage;
+//    @Autowired
+//    private RedissonManage redissonManage;
 
     /**
      * 方法v2的折中方案
@@ -62,8 +62,7 @@ public class CloseOrderTask {
     public void closeOrderTaskV2(){
         log.info("关闭订单定时任务启动");
         long lockTimeout = Long.parseLong(PropertiesUtil.getProperty("lock.timeout","5000"));
-        Long setnxResult= RedisShardedPoolUtil.setnx(Const.REDIS_LOCK.CLOSE_ORDER_TASK_LOCK,
-                String.valueOf(System.currentTimeMillis()+lockTimeout));
+        Long setnxResult= RedisShardedPoolUtil.setnx(Const.REDIS_LOCK.CLOSE_ORDER_TASK_LOCK, String.valueOf(System.currentTimeMillis()+lockTimeout));
         if(setnxResult != null && setnxResult.intValue() == 1){
             //如果返回值为1，代表设置成功，获取锁
             closeOrder(Const.REDIS_LOCK.CLOSE_ORDER_TASK_LOCK);
@@ -76,23 +75,21 @@ public class CloseOrderTask {
     /**
      * springScheduled与redis原生实现分布式定时任务的改良版
      * **/
-    //@Scheduled(cron="0 */1 * * * ?")//每一分钟的整数倍
+    @Scheduled(cron="0 */1 * * * ?")//每一分钟的整数倍
     public void closeOrderTaskV3(){
         log.info("关闭订单定时任务启动");
         long lockTimeout = Long.parseLong(PropertiesUtil.getProperty("lock.timeout","5000"));
-        Long setnxResult= RedisShardedPoolUtil.setnx(Const.REDIS_LOCK.CLOSE_ORDER_TASK_LOCK,
-                String.valueOf(System.currentTimeMillis()+lockTimeout));
+        Long setnxResult= RedisShardedPoolUtil.setnx(Const.REDIS_LOCK.CLOSE_ORDER_TASK_LOCK, String.valueOf(System.currentTimeMillis()+lockTimeout));
         if(setnxResult != null && setnxResult.intValue() == 1){
             //如果返回值为1，代表设置成功，获取锁
             closeOrder(Const.REDIS_LOCK.CLOSE_ORDER_TASK_LOCK);
         }else{
-            //为获取到分布式锁，继续判断，判断时间戳，看是否可以重置并获取到锁
+            //未获取到分布式锁，继续判断，判断时间戳，看是否可以重置并获取到锁
             String lockValueStr = RedisShardedPoolUtil.get(Const.REDIS_LOCK.CLOSE_ORDER_TASK_LOCK);
             if(lockValueStr != null && System.currentTimeMillis()> Long.parseLong(lockValueStr)){
                 //假如一个tomcat的话，此时的lockValueStr的值与getSerResult的值应该是相等的，但是此时是tomcat集群环境，有多个进程在执行，
                 // 可能lockValueStr的值就被另一个进程修改了，所以此时要获取当下的lockValueStr
-               String getSerResult =  RedisShardedPoolUtil.getSet(Const.REDIS_LOCK.CLOSE_ORDER_TASK_LOCK,
-                       String.valueOf(System.currentTimeMillis()+lockTimeout));
+               String getSerResult =  RedisShardedPoolUtil.getSet(Const.REDIS_LOCK.CLOSE_ORDER_TASK_LOCK, String.valueOf(System.currentTimeMillis()+lockTimeout));
                //再次用当前的时间戳
                //返回给定的key的旧值，然后根据旧值判断，是否可以获取到锁
                //当key没有旧值得时候，既key不存在，则此时返回nil，之后再去获取锁
@@ -113,33 +110,34 @@ public class CloseOrderTask {
 
     /**
      * springScheduled与redisson实现分布式定时任务
+     * 因为redisson不支持分片的redis，这里当演示用
      * **/
-    @Scheduled(cron="0 */1 * * * ?")//每一分钟的整数倍
-    public void closeOrderTaskV4(){
-        RLock lock = redissonManage.getRedission().getLock(Const.REDIS_LOCK.CLOSE_ORDER_TASK_LOCK);
-        boolean getLock = false;
-        try {
-            //锁最多等待2秒，5秒后释放
-            //这边的waitTime应该设置为0，因为等待时间过长，可能导致两边同时拿到分布式锁的问题
-            // （当定时任务执行的非常快的时候，等待时间过长就会导致其他线程获取到该锁）
-            if(getLock = lock.tryLock(0,5, TimeUnit.SECONDS)){
-                log.info("Redisson获取分布式锁：{} ThreadName:{}",Const.REDIS_LOCK.CLOSE_ORDER_TASK_LOCK,Thread.currentThread().getName());
-                int hour = Integer.parseInt(PropertiesUtil.getProperty("close.order.task.time.hour","2"));
-                iOrderService.closeOrder(hour);
-            }else{
-                log.info("Redisson没有获取到分布式锁：{}，ThreadName:{}",
-                        Const.REDIS_LOCK.CLOSE_ORDER_TASK_LOCK,Thread.currentThread().getName());
-            }
-        } catch (InterruptedException e) {
-            log.error("redisson分布式获取锁异常");
-        }finally{
-            if(!getLock){
-                return;
-            }
-            lock.unlock();
-            log.info("Redisson分布式释放锁");
-        }
-    }
+    //@Scheduled(cron="0 */1 * * * ?")//每一分钟的整数倍
+//    public void closeOrderTaskV4(){
+//        RLock lock = redissonManage.getRedission().getLock(Const.REDIS_LOCK.CLOSE_ORDER_TASK_LOCK);
+//        boolean getLock = false;
+//        try {
+//            //锁最多等待2秒，5秒后释放
+//            //这边的waitTime应该设置为0，因为等待时间过长，可能导致两边同时拿到分布式锁的问题
+//            // （当定时任务执行的非常快的时候，等待时间过长就会导致其他线程获取到该锁）
+//            if(getLock = lock.tryLock(0,5, TimeUnit.SECONDS)){
+//                log.info("Redisson获取分布式锁：{} ThreadName:{}",Const.REDIS_LOCK.CLOSE_ORDER_TASK_LOCK,Thread.currentThread().getName());
+//                int hour = Integer.parseInt(PropertiesUtil.getProperty("close.order.task.time.hour","2"));
+//                iOrderService.closeOrder(hour);
+//            }else{
+//                log.info("Redisson没有获取到分布式锁：{}，ThreadName:{}",
+//                        Const.REDIS_LOCK.CLOSE_ORDER_TASK_LOCK,Thread.currentThread().getName());
+//            }
+//        } catch (InterruptedException e) {
+//            log.error("redisson分布式获取锁异常");
+//        }finally{
+//            if(!getLock){
+//                return;
+//            }
+//            lock.unlock();
+//            log.info("Redisson分布式释放锁");
+//        }
+//    }
 
     /**
      * 关闭订单并且释放锁

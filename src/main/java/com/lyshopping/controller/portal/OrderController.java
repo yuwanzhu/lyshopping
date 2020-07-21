@@ -11,7 +11,7 @@ import com.lyshopping.pojo.User;
 import com.lyshopping.service.IOrderService;
 import com.lyshopping.util.CookieUtil;
 import com.lyshopping.util.JsonUtil;
-import com.lyshopping.util.RedisPoolUtil;
+//import com.lyshopping.util.RedisPoolUtil;
 import com.lyshopping.util.RedisShardedPoolUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

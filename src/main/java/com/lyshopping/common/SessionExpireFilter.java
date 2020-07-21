@@ -3,7 +3,7 @@ package com.lyshopping.common;
 import com.lyshopping.pojo.User;
 import com.lyshopping.util.CookieUtil;
 import com.lyshopping.util.JsonUtil;
-import com.lyshopping.util.RedisPoolUtil;
+//import com.lyshopping.util.RedisPoolUtil;
 import com.lyshopping.util.RedisShardedPoolUtil;
 import org.apache.commons.lang.StringUtils;
 

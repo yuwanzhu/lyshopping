@@ -4,6 +4,7 @@
     <meta http-equiv="Content-Type" content="multipart/form-data; charset=utf-8" />
 </head>
 <body>
+<h1>tomcat1</h1>
 <h2>Hello World!</h2>
 
 springmvc上传文件
